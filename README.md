@@ -34,9 +34,9 @@ The process of automating the message receiving and delivery message was made by
 4) There has to be a format maintained while sending the message to the registered number.
 
 ## API's Integrated
-Paytm Gateway API
-Google Captcha API
-Google Translator
-Google Live Chat API
-Textlocal API
-Phpmailer
+Paytm Gateway API  
+Google Captcha API  
+Google Translator  
+Google Live Chat API  
+Textlocal API  
+Phpmailer  
