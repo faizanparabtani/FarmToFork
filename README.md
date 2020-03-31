@@ -32,3 +32,11 @@ The process of automating the message receiving and delivery message was made by
 2) If a message has body saying '1' it will send all the details of the vegetables and their prices.
 3) If a message has a body other than 1 it will segregate and insert into database the appropriate fields.
 4) There has to be a format maintained while sending the message to the registered number.
+
+## API's Integrated
+Paytm Gateway API
+Google Captcha API
+Google Translator
+Google Live Chat API
+Textlocal API
+Phpmailer
