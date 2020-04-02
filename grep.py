@@ -3,10 +3,11 @@ import pycurl
 from urllib.parse import urlencode
 import json
 
-api_key = 'E4GV++pRNXA-Azk2mx2PIHKVsJ7mBejDrV9RGhV0Ts'
-inbox_id = '10'
+# Your apikey and inbox_id goes in here
+api_key = ''
+inbox_id = ''
 
-data = {"api_key": 'E4GV++pRNXA-Azk2mx2PIHKVsJ7mBejDrV9RGhV0Ts',"inbox_id": '10'}
+data = {"api_key": '',"inbox_id": ''}
 send = urlencode(data)
 crl = pycurl.Curl()
 crl_send = pycurl.Curl()
@@ -18,6 +19,7 @@ except ImportError:
 
 buffer = BytesIO()
 
+# This retrieves the message from the inbox
 crl.setopt(crl.URL, 'https://api.textlocal.in/get_messages/')
 crl.setopt(crl.POST, True)
 crl.setopt(crl.POSTFIELDS, send)
@@ -28,8 +30,8 @@ message_str = message_byte.decode()
 message_dict = json.loads(message_str)
 crl.close()
 
-
-connection = mysql.connector.connect(host="remotemysql.com",user="R6vLKAaC04",passwd="5RkA8NFFSU",database="R6vLKAaC04" )
+# Establishing connection with database
+connection = mysql.connector.connect(host="", user="", passwd="", database="" )
 cursor = connection.cursor(buffered=True)
 
 
@@ -38,7 +40,10 @@ true = 0
 message_list = []
 number_list = []
 datetime_list = []
+
+# Format maintained to ensure sucessful operations on data
 mess_format = ['8YCBH', 'FarmerID', 'VegetableName', 'Weight(kg)']
+
 
 for i in message_dict["messages"]:
     try:
@@ -48,9 +53,15 @@ for i in message_dict["messages"]:
     except KeyError:
         pass
 
+# Query to check for duplicate entries
 query_check = "SELECT (sent_dt) FROM sms_in WHERE sent_dt LIKE (%s)";
+
+# Query to insert values into a database
 query_insert = "INSERT INTO sms_in(sms_text, sender_number, sent_dt) VALUES (%s,%s,%s)";
+
+# Query to display prices of commodities
 query_display = "SELECT v_name, farmer_v_price FROM vegetable";
+
 
 for (i, j, k) in zip(message_list, number_list, datetime_list):
     cursor.execute(query_check, (k,))
@@ -58,11 +69,12 @@ for (i, j, k) in zip(message_list, number_list, datetime_list):
     if res == 1:
         continue
     else:
+        # Inbox name 1 sends a message to the initial sender the names and prices of commodities
         if i == '8YCBH 1':
             cursor.execute(query_display)
             vegetable_display = cursor.fetchall()
             vegetable_format = vegetable_display + mess_format
-            send_data = {"api_key": 'E4GV++pRNXA-Azk2mx2PIHKVsJ7mBejDrV9RGhV0Ts',"numbers": int(j), "message" : vegetable_format}
+            send_data = {"api_key": '',"numbers": int(j), "message" : vegetable_format}
             final_data = urlencode(send_data)
             crl_send.setopt(crl_send.URL, 'https://api.textlocal.in/send/')
             crl_send.setopt(crl_send.POST, True)
